@@ -12,14 +12,15 @@ UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S),Linux)
 	GLFW_PATH := $(shell pkg-config --variable=prefix glfw3)
+	CFLAGS := -Wall -Wextra -Werror -Ofast -march=native -funroll-loops
 endif
 ifeq ($(UNAME_S),Darwin)
 	GLFW_PATH := $(shell brew --prefix glfw)
+	CFLAGS := -Wall -Wextra -Werror -Ofast -march=native -flto -funroll-loops
 endif
 
 HEADERS := -I ./include -I $(LIBMLX)/include -I $(LIBFT)/include -I $(GNL)/include -I $(GLFW_PATH)/include
 LIBS := $(LIBMLX)/build/libmlx42.a -ldl -lm -L$(GLFW_PATH)/lib -lglfw $(LIBFT)/libft.a $(GNL)/libftgnl.a
-CFLAGS := -Wall -Wextra -Werror -Ofast -march=native -flto -funroll-loops
 
 $(NAME): setup $(OBJ) $(LIBMLX)/build/libmlx42.a $(LIBFT)/libft.a $(GNL)/libftgnl.a
 	cc $(OBJ) $(LIBS) $(HEADERS) -o $(NAME)
